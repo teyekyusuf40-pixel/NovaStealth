@@ -2,133 +2,117 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaOS Safe Pro</title>
-    <!-- El yazısı fontu için Google Fonts -->
+    <title>NovaOS Safe Elite</title>
+    <!-- El yazısı için fontlar -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00FF00; --bg: #06090f; }
-        body { 
-            background-color: var(--bg); 
-            color: #e6edf3; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            text-align: center; 
-        }
+        body { background-color: var(--bg); color: #e6edf3; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
         
         header { 
-            padding: 80px 20px; 
+            padding: 60px 20px; 
             background: radial-gradient(circle, #161b22, #06090f);
             border-bottom: 2px solid var(--primary);
         }
 
-        /* El Yazısı Başlık */
-        .handwritten-title {
+        /* İstediğin Büyük El Yazısı Başlık */
+        .nova-safe-title {
             font-family: 'Great Vibes', cursive;
-            font-size: 5rem;
+            font-size: 6rem;
             color: var(--primary);
-            text-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
-            margin: 20px 0;
+            text-shadow: 0 0 25px rgba(0, 255, 0, 0.7);
+            margin: 10px 0;
         }
 
-        .patent-label {
+        .patent-badge {
             font-family: 'Dancing Script', cursive;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--primary);
             border: 1px solid var(--primary);
-            padding: 5px 25px;
+            padding: 5px 30px;
             border-radius: 50px;
             display: inline-block;
         }
 
+        /* İNDİRME BUTONU */
         .btn-download {
-            background: #238636;
+            background: linear-gradient(45deg, #238636, #2ea043);
             color: white;
-            padding: 20px 60px;
+            padding: 22px 70px;
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             display: inline-block;
             margin: 40px 0;
             transition: 0.3s;
-            box-shadow: 0 0 15px rgba(35, 134, 54, 0.4);
+            border: none;
+            cursor: pointer;
         }
-        .btn-download:hover { transform: scale(1.05); background: #2ea043; }
+        .btn-download:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(46, 160, 67, 0.6); }
 
-        /* Alt Seçenekler Alanı */
-        .features-grid {
+        /* ALT SEÇENEKLER */
+        .options-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            padding: 50px 20px;
+            gap: 25px;
+            padding: 40px 20px;
             flex-wrap: wrap;
         }
 
-        .feature-card {
+        .option-card {
             background: #0d1117;
             border: 1px solid #30363d;
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
-            width: 280px;
+            width: 260px;
             transition: 0.3s;
         }
-        .feature-card:hover { border-color: var(--primary); transform: translateY(-10px); }
+        .option-card:hover { border-color: var(--primary); transform: translateY(-10px); }
 
-        /* Kartlardaki El Yazısı Detayları */
-        .feature-card h3 {
+        .option-card h3 {
             font-family: 'Dancing Script', cursive;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--primary);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        .warning-text {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            color: #ff4b4b;
-            margin: 40px 0;
-        }
-
-        footer { padding: 40px; color: #8b949e; font-size: 0.8rem; }
+        footer { padding: 30px; color: #8b949e; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="patent-label">Official Patent Security</div>
-    <!-- İstediğin Büyük El Yazısı Bölümü -->
-    <div class="handwritten-title">NovaOSSafe</div>
-    <p style="letter-spacing: 2px;">MSI Katana GF66 Stealth Module</p>
+    <div class="patent-badge">🛡️ Nova Patented Security</div>
+    <!-- Büyük El Yazısı Bölümü -->
+    <div class="nova-safe-title">NovaOSSafe</div>
+    <p style="letter-spacing: 3px; font-weight: bold; color: #8b949e;">MSI KATANA GF66 ELITE MODULE</p>
     
-    <!-- İndirme butonundaki 3. taraf engelini aşan yapı -->
-    <a href="https://github.com/teyekyusuf40-pixel/NovaStealth/raw/main/NovaOS_Stealth.pyw" 
-       class="btn-download" download>
-        Yazılımı Güvenli İndir
+    <!-- İndirmeyi zorunlu kılan link yapısı -->
+    <a href="https://raw.githubusercontent.com/teyekyusuf40-pixel/NovaStealth/main/NovaOS_Stealth.pyw" 
+       download="NovaOS_Stealth.pyw" 
+       class="btn-download">
+        HAYALET MODUNU İNDİR
     </a>
 </header>
 
-<div class="features-grid">
-    <div class="feature-card">
-        <h3>IP Maskeleme</h3>
-        <p>10 farklı lokasyon ile sistem kimliğinizi tamamen gizleyin.</p>
+<div class="options-container">
+    <div class="option-card">
+        <h3>IP Mühürleme</h3>
+        <p>Dünya çapında 10+ lokasyon ile izini kaybet.</p>
     </div>
-    <div class="feature-card">
-        <h3>Firewall Elite</h3>
-        <p>Dışarıdan gelen veri sızıntılarını anında mühürleyin.</p>
+    <div class="option-card">
+        <h3>Firewall Plus</h3>
+        <p>Sistem portlarını dış dünyaya tamamen kapat.</p>
     </div>
-    <div class="feature-card">
-        <h3>Oyun Modu</h3>
-        <p>Valorant için tek tıkla ağ protokolü onarımı.</p>
+    <div class="option-card">
+        <h3>Hızlı Onarım</h3>
+        <p>Valorant pingini düşürmek için ağ ayarlarını sıfırla.</p>
     </div>
-</div>
-
-<div class="warning-text">
-    "Huzurlu bir oyun için sistemini her zaman temiz tut..."
 </div>
 
 <footer>
-    © 2026 NovaOS Systems - Developed by Yusuf
+    © 2026 NovaOS Systems - Yusuf Projesi
 </footer>
 
 </body>
