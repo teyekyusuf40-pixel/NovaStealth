@@ -1,99 +1,124 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaOS Stealth Pro v4.0</title>
-    <style>
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+import customtkinter as ctk
+import os
+import sys
+import ctypes
+
+# Siyah ekranı ve izin sorununu kökten çözen başlangıç
+def run_as_admin():
+    if ctypes.windll.shell32.IsUserAnAdmin():
+        return True
+    else:
+        # CMD penceresi olmadan (0 parametresiyle) yönetici izni ister
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 0)
+        sys.exit()
+
+class NovaStealthElite(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("NovaOS - Ghost Protocol Elite v4.0")
+        self.geometry("550x700")
+        self.resizable(False, False)
+        ctk.set_appearance_mode("dark")
+        
+        # Ana Çerçeve
+        self.container = ctk.CTkFrame(self, corner_radius=20, border_width=2, border_color="#00FF00")
+        self.container.pack(pady=20, padx=20, fill="both", expand=True)
+
+        self.header = ctk.CTkLabel(self.container, text="🛡️ NOVA STEALTH PRO", font=("Orbitron", 28, "bold"), text_color="#00FF00")
+        self.header.pack(pady=25)
+
+        # 10 Ülke ve Proxy Listesi
+        self.proxies = {
+            "Almanya (Hızlı)": "88.99.10.251:1080",
+            "Hollanda": "188.166.162.33:8080",
+            "ABD - New York": "144.202.112.152:80",
+            "İngiltere": "178.62.193.19:3128",
+            "Fransa": "51.15.37.154:3128",
+            "Japonya": "103.208.200.12:80",
+            "Singapur": "139.59.105.151:8080",
+            "Kanada": "158.69.53.111:3128",
+            "İtalya": "185.241.208.204:80",
+            "Brezilya": "18.228.198.150:80"
         }
-        header {
-            width: 100%;
-            padding: 50px 0;
-            text-align: center;
-            background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
-            border-bottom: 1px solid #30363d;
-        }
-        h1 { color: #00FF00; font-size: 3rem; margin: 0; letter-spacing: 2px; }
-        .download-section { margin: 40px 0; }
-        .btn-download {
-            background-color: #238636;
-            color: white;
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            transition: 0.3s;
-        }
-        .btn-download:hover { background-color: #2ea043; transform: scale(1.05); }
-        .features {
-            max-width: 800px;
-            padding: 20px;
-            text-align: left;
-            line-height: 1.6;
-        }
-        .feature-item {
-            background: #161b22;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #30363d;
-        }
-        .feature-item h3 { color: #58a6ff; margin-top: 0; }
-        footer { margin: 50px; color: #8b949e; font-size: 0.9rem; }
-    </style>
-</head>
-<body>
 
-<header>
-    <h1>NOVA SECURITY HUB</h1>
-    <p>Dijital İzlerinizi Tek Tıkla Mühürleyin</p>
-    
-    <div class="download-section">
-        <a href="https://github.com/KULLANICI_ADIN/PROJE_ADIN/archive/refs/heads/main.zip" class="btn-download">
-            HEMEN İNDİR (.zip)
-        </a>
-    </div>
-</header>
+        # Ülke Seçimi
+        self.c_label = ctk.CTkLabel(self.container, text="LOKASYON SEÇİMİ", font=("Arial", 12, "bold"))
+        self.c_label.pack(pady=(10, 0))
+        self.country_menu = ctk.CTkOptionMenu(self.container, values=list(self.proxies.keys()), fg_color="#1f538d", width=250)
+        self.country_menu.pack(pady=10)
 
-<div class="features">
-    <div class="feature-item">
-        <h3>🌍 10 Farklı Ülke Seçeneği</h3>
-        <p>Gerçek IP adresinizi sistem düzeyinde maskeleyin. Google aramalarında bile seçtiğiniz ülkede görünün.</p>
-    </div>
-    
-    <div class="feature-item">
-        <h3>🛡️ Ghost Protocol (Hayalet Modu)</h3>
-        <p>Tüm giden ve gelen veri trafiğini anında kesin. İnternete bağlı kalsanız bile dış dünya sizi göremez.</p>
-    </div>
+        # IP Gizleme Butonu
+        self.ip_btn = ctk.CTkButton(self.container, text="IP GİZLEMEYİ BAŞLAT", fg_color="#1b4d1b", 
+                                   hover_color="#006400", command=self.activate_proxy, height=45)
+        self.ip_btn.pack(pady=15, padx=60, fill="x")
 
-    <div class="feature-item">
-        <h3>🔒 İzlenemez DNS</h3>
-        <p>İnternet servis sağlayıcınızın (ISS) hangi sitelere girdiğinizi görmesini zorlaştıran güvenli DNS yapılandırması.</p>
-    </div>
+        # Güvenlik Modülleri
+        self.firewall_active = False
+        self.f_btn = ctk.CTkButton(self.container, text="DIŞARIYI BLOKE ET [KAPALI]", fg_color="#333", command=self.toggle_firewall)
+        self.f_btn.pack(pady=10, padx=60, fill="x")
 
-    <div class="feature-item">
-        <h3>⚡ FPS & Ping Dostu</h3>
-        <p>MSI Katana GF66 gibi güçlü donanımlar için optimize edilmiştir. Gereksiz sistem kaynağı tüketmez.</p>
-    </div>
+        self.dns_active = False
+        self.d_btn = ctk.CTkButton(self.container, text="GİZLİ DNS [KAPALI]", fg_color="#333", command=self.toggle_dns)
+        self.d_btn.pack(pady=10, padx=60, fill="x")
 
-    <div class="feature-item">
-        <h3>🆘 Acil Durum Sıfırlama</h3>
-        <p>Herhangi bir sorun anında tüm ağ ayarlarını Windows fabrika ayarlarına döndüren tek tıkla onarım mekanizması.</p>
-    </div>
-</div>
+        # --- KRİTİK: ACİL DURUM SIFIRLAMA ---
+        self.reset_btn = ctk.CTkButton(self.container, text="SİSTEMİ TAM ONAR (GAMING MODE)", fg_color="#8B0000", 
+                                      hover_color="#FF0000", command=self.full_reset, height=50, font=("Arial", 14, "bold"))
+        self.reset_btn.pack(pady=30, padx=60, fill="x")
 
-<footer>
-    © 2026 NovaOS Development Team - Yusuf
-</footer>
+        self.status = ctk.CTkLabel(self.container, text="DURUM: SİSTEM NORMAL", text_color="gray")
+        self.status.pack(side="bottom", pady=15)
 
-</body>
-</html>
+        # Kapanış Protokolü
+        self.protocol("WM_DELETE_WINDOW", self.close_safe)
+
+    def activate_proxy(self):
+        choice = self.country_menu.get()
+        p_addr = self.proxies[choice]
+        os.system(f'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f')
+        os.system(f'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d "{p_addr}" /f')
+        self.status.configure(text=f"AKTİF: {choice}", text_color="#00FF00")
+        self.ip_btn.configure(text="IP GİZLENDİ ✔", fg_color="#00FF00", text_color="black")
+
+    def toggle_firewall(self):
+        self.firewall_active = not self.firewall_active
+        if self.firewall_active:
+            os.system('netsh advfirewall firewall add rule name="NovaGuard" dir=out action=block')
+            self.f_btn.configure(text="DIŞARI BLOKE EDİLDİ ✔", fg_color="#1b4d1b")
+        else:
+            os.system('netsh advfirewall firewall delete rule name="NovaGuard"')
+            self.f_btn.configure(text="DIŞARIYI BLOKE ET [KAPALI]", fg_color="#333")
+
+    def toggle_dns(self):
+        self.dns_active = not self.dns_active
+        if self.dns_active:
+            os.system('netsh interface ip set dns "Wi-Fi" static 1.1.1.1')
+            self.d_btn.configure(text="DNS ŞİFRELENDİ ✔", fg_color="#1b4d1b")
+        else:
+            os.system('netsh interface ip set dns "Wi-Fi" dhcp')
+            self.d_btn.configure(text="GİZLİ DNS [KAPALI]", fg_color="#333")
+
+    def full_reset(self):
+        # Her şeyi temizle
+        os.system('reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /f')
+        os.system('netsh advfirewall firewall delete rule name="NovaGuard"')
+        os.system('netsh interface ip set dns "Wi-Fi" dhcp')
+        os.system('netsh int ip reset')
+        # UI Güncelle
+        self.status.configure(text="DURUM: SİSTEM ONARILDI", text_color="white")
+        self.ip_btn.configure(text="IP GİZLEMEYİ BAŞLAT", fg_color="#1b4d1b", text_color="white")
+        self.f_btn.configure(text="DIŞARIYI BLOKE ET [KAPALI]", fg_color="#333")
+        self.d_btn.configure(text="GİZLİ DNS [KAPALI]", fg_color="#333")
+        self.firewall_active = False
+        self.dns_active = False
+
+    def close_safe(self):
+        # Kapatırken her şeyi sıfırla ki internet gitmesin
+        self.full_reset()
+        self.destroy()
+
+if __name__ == "__main__":
+    if run_as_admin():
+        app = NovaStealthElite()
+        app.mainloop()
